@@ -4,17 +4,16 @@ pragma solidity ^0.8.19;
 import {Script, console2} from "forge-std/Script.sol";
 import {Raffle} from "../src/Raffle.sol";
 import {DevOpsTools} from "lib/foundry-devops/src/DevOpsTools.sol";
-import {VRFCoordinatorV2_5Mock} from "lib/chainlink-brownie-contracts/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol";
+import {
+    VRFCoordinatorV2_5Mock
+} from "lib/chainlink-brownie-contracts/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol";
 
 contract InteractRaffle is Script {
     function run() external {
         // -----------------------------
         // 0. Setup
         // -----------------------------
-        address raffleAddr = DevOpsTools.get_most_recent_deployment(
-            "Raffle",
-            block.chainid
-        );
+        address raffleAddr = DevOpsTools.get_most_recent_deployment("Raffle", block.chainid);
         Raffle raffle = Raffle(raffleAddr);
 
         address localAccount = 0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266;
@@ -46,12 +45,8 @@ contract InteractRaffle is Script {
         // -----------------------------
         // 4. Fulfill random words (local)
         // -----------------------------
-        VRFCoordinatorV2_5Mock vrf = VRFCoordinatorV2_5Mock(
-            DevOpsTools.get_most_recent_deployment(
-                "VRFCoordinatorV2_5Mock",
-                block.chainid
-            )
-        );
+        VRFCoordinatorV2_5Mock vrf =
+            VRFCoordinatorV2_5Mock(DevOpsTools.get_most_recent_deployment("VRFCoordinatorV2_5Mock", block.chainid));
 
         uint256 requestId = 1; // usually first request
         vrf.fulfillRandomWords(requestId, raffleAddr);
